@@ -14,5 +14,6 @@ add_subdirectory( page_builder )
 add_subdirectory( owfs_reader )
 add_subdirectory( math )
 add_subdirectory( power_supply_monitor )
+add_subdirectory( mail_notifier )
 add_subdirectory( main )
 
