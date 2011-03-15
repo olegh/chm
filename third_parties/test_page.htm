@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Untitled Page</title>
+    <script type="text/JavaScript" src="jsDraw2D.js"></script>
+</head>
+<body>
+<div id="canvas" style="position:relative;width:600px;height:300px;"></div> 
+<script type="text/JavaScript">
+
+    //Create jsGraphics object
+    var gr = new jsGraphics(document.getElementById("canvas"));
+
+    //Create jsColor object
+    var col = new jsColor("red");
+
+    //Create jsPen object
+    var pen = new jsPen(col,1);
+
+    gr.fillPolygon(new jsColor("#FFCC33"), 
+                new Array( new jsPoint(0,0)
+                           ,new jsPoint(100,0),
+                           new jsPoint(100,100),
+                           new jsPoint(0,100)));
+    
+    gr.drawPolygon( new jsPen( new jsColor("black"), 3 ), 
+                    new Array( new jsPoint(0,0),
+                               new jsPoint(100,0),
+                               new jsPoint(100,100),
+                               new jsPoint(0,100)));
+
+
+    gr.drawText("text", new jsPoint(5,5), "Courier New", new jsColor("red"), "3", "left" )
+
+</script>
+
+</body>
+</html>
