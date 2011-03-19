@@ -73,7 +73,7 @@ public:
   	std::ifstream state_file((file_name_.c_str()));
   	if( !state_file.good() )
   	{
-  	  BOOST_THROW_EXCEPTION( std::runtime_error("Can't open file" + file_name_));
+  	  BOOST_THROW_EXCEPTION( std::runtime_error("Can't open file:" + file_name_));
   	}
 
   	std::istream_iterator<char> begin(state_file);
@@ -81,6 +81,7 @@ public:
   	std::string fileContent;
   	std::copy( begin, end, std::back_inserter(fileContent) );
 
+  	wrapped_stream_.clear();
   	wrapped_stream_.str(fileContent);
   	return wrapped_stream_;
 	}
@@ -107,11 +108,11 @@ namespace chm
 class power_supply_monitor
 {
 public:
-  power_supply_monitor()
+  explicit power_supply_monitor( const std::string& ac_adapters_path = "/proc/acpi/ac_adapter" )
    : stream_wrapper_()
   {
     using namespace boost::filesystem;
-  	path ac_adapters_dir = "/proc/acpi/ac_adapter";
+  	path ac_adapters_dir = ac_adapters_path;
   	boost::filesystem::directory_iterator dirIter((ac_adapters_dir));
   	path ac_dir = *dirIter,
     state = ac_dir / "state";
@@ -126,7 +127,7 @@ public:
   	stream_wrapper_ = detail::make_stream_wrapper( stream );
   }
 
-  bool isPowerOn()
+  bool is_power_on()
   {
 	  const std::string onLineStr = "on-line";
 	  std::istream_iterator<char> begin(stream_wrapper_->get());

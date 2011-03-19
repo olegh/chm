@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE( check_is_power_on )
   fileStream << fileContent;
 
   power_supply_monitor monitor( fileStream );
-  BOOST_CHECK( monitor.isPowerOn() );
+  BOOST_CHECK( monitor.is_power_on() );
 }
 
 /**
@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE( check_is_power_off )
   fileStream << fileContent;
 
   power_supply_monitor monitor( fileStream );
-  BOOST_CHECK( !monitor.isPowerOn() );
+  BOOST_CHECK( !monitor.is_power_on() );
 
   std::basic_istream<char>& stream_ref = fileStream;
 }
@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE( check_is_file_content_empty )
   fileStream << fileContent;
 
   power_supply_monitor monitor( fileStream );
-  BOOST_CHECK( !monitor.isPowerOn() );
+  BOOST_CHECK( !monitor.is_power_on() );
 }
 
 void remove_wrap( const char* fileName )
@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE( read_from_file_is_powered_on_test )
   std::ifstream fileStream(( "state" ));
   BOOST_CHECK( fileStream.good() );
   power_supply_monitor monitor( fileStream );
-  BOOST_CHECK( monitor.isPowerOn() );
+  BOOST_CHECK( monitor.is_power_on() );
 }
 
 /**
@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_CASE( read_from_file_is_powered_on_test )
 BOOST_AUTO_TEST_CASE( find_ac_adapter_state_on_current_platform )
 {
   BOOST_CHECK_NO_THROW( power_supply_monitor() );
-  BOOST_CHECK_NO_THROW( power_supply_monitor().isPowerOn() );
+  BOOST_CHECK_NO_THROW( power_supply_monitor().is_power_on() );
 }
 //================================================================
 
