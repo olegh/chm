@@ -1,0 +1,48 @@
+polygon
+{
+  thermometer_id 22.DE8919000000
+  point
+  {
+    x 10
+    y 10
+  }
+  point
+  {
+    x 100
+    y 10
+  }
+  point
+  {
+    x 100
+    y 100
+  }
+  point
+  {
+    x 10
+    y 100
+  }
+  text
+  {
+    name comment
+    value
+    x 120
+    y 10
+    color 0
+  }
+  text
+  {
+    name temperature
+    value 
+    x 120
+    y 30
+    color 155
+  }
+  text
+  {
+    name Room
+    value Room
+    x 120
+    y 50
+    color 90
+  }
+}

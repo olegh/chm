@@ -5,3 +5,7 @@ target_link_libraries( chm
                        mail_notifier
                        ${Boost_LIBRARIES}
                        ${CMAKE_THREAD_LIBS_INIT} )
+                       
+ install( TARGETS chm
+          RUNTIME DESTINATION /opt/chm/bin )
+          

@@ -9,6 +9,8 @@ include( ThirdParties.cmake NO_POLICY_SCOPE )
 
 include_directories( ${CMAKE_SOURCE_DIR} )
 
+add_subdirectory( third_parties )
+add_subdirectory( configuration_files )
 add_subdirectory( plan_reader )
 add_subdirectory( page_builder )
 add_subdirectory( owfs_reader )
