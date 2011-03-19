@@ -1,6 +1,6 @@
 polygon
 {
-  thermometer_id 22.DE8919000000
+  thermometer_id 22.A5A219000000
   point
   {
     x 10
@@ -44,5 +44,13 @@ polygon
     x 120
     y 50
     color 90
+  }
+  text
+  {
+    name power
+    value power
+    x 120
+    y 70
+    color 1000
   }
 }

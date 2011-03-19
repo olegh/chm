@@ -11,6 +11,7 @@
 #include <boost/bind.hpp>
 #include "common/named_properties.hpp"
 #include "common/ptree_helpers.hpp"
+#include "common/polygon_ptree_helpers.hpp"
 
 namespace chm
 {
@@ -32,27 +33,6 @@ namespace chm
     }
 
   private:
-
-    template<class Ptree> typename Ptree::assoc_iterator
-    find_text_node( const std::string& name_in_text_node, Ptree& polygon  )
-    {
-      typename Ptree::assoc_iterator it = polygon.ordered_begin(), 
-                                     endIt = polygon.not_found();
-
-      for( ; endIt != it; ++it )
-      {
-        if( (*it).first == props::polygon::text::relative())
-        {
-          const std::string name_in_cur_text_node = 
-            (*it).second.template get<std::string>(props::polygon::text::name::relative());
-
-          if( name_in_text_node == name_in_cur_text_node )
-            return it;
-        }  
-      }
-
-      return polygon.not_found();
-    }
 
     template<class Ptree>
     void update_polygon( typename Ptree::value_type& pair )

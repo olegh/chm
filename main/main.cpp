@@ -17,6 +17,7 @@
 #include "common/ptree_helpers.hpp"
 #include "power_supply_monitor/power_state_alarmer.h"
 #include "power_supply_monitor/power_supply_monitor.h"
+#include "power_supply_monitor/power_state_polygon_updater.hpp"
 #include "mail_notifier/mail_notifier.h"
 
 using namespace chm;
@@ -35,8 +36,9 @@ void add_builders( page& html_page,
 }
 //============================================================
 void generate_page( const std::string& owfs_path,
-                   const std::string& target_file,
-                   const std::string& plan_file )
+                    const std::string& target_file,
+                    const std::string& plan_file,
+                    const std::string& ac_adapter_path )
 {
   std::ifstream in_file(( plan_file.c_str() ));
   plan_reader reader( in_file, plan_reader::make_info_reader(in_file) );
@@ -44,6 +46,9 @@ void generate_page( const std::string& owfs_path,
 
   owfs_reader ofws((owfs_path));
   ofws.update_tree( tree );
+
+  power_state_polygon_updater power_updater((ac_adapter_path));
+  power_updater.update_tree( tree );
 
   page html_page;
   std::for_each( make_begin_filter_const(props::polygon::relative(), tree),
@@ -57,6 +62,7 @@ void generate_page( const std::string& owfs_path,
 void page_generator( const std::string& owfs_path,
                           const std::string& target_file,
                           const std::string& plan_file,
+                          const std::string& ac_adapter_path,
                           unsigned update_period_sec,
                           boost::asio::deadline_timer& timer,
                           const boost::system::error_code& error )
@@ -70,7 +76,7 @@ void page_generator( const std::string& owfs_path,
 
   try
   {
-    generate_page( owfs_path, target_file, plan_file );
+    generate_page( owfs_path, target_file, plan_file, ac_adapter_path );
   }
   catch( ... )
   {
@@ -82,6 +88,7 @@ void page_generator( const std::string& owfs_path,
                          ref(owfs_path),
                          ref(target_file),
                          ref(plan_file),
+                         ref(ac_adapter_path),
                          update_period_sec,
                          ref(timer),
                          _1));
@@ -150,9 +157,10 @@ void run_as_deamon( const std::string& owfs_path,
   
   page_generator( owfs_path, 
                       target_file, 
-                      plan_file, 
+                      plan_file,
+                      ac_adapter_path,
                       update_period_sec, 
-                      timer_page_generator, 
+                      timer_page_generator,
                       boost::system::error_code() );
 
   power_state_checker( alarmer,
@@ -210,7 +218,7 @@ int main( int argc, char* argv[] )
       		           mail_notify_to );
     }
     else
-      generate_page( owfs_path, target_file, plan_file );
+      generate_page( owfs_path, target_file, plan_file, ac_adapter_path );
     
   }
   catch( ... )
