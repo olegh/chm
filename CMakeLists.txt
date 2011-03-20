@@ -18,4 +18,5 @@ add_subdirectory( math )
 add_subdirectory( power_supply_monitor )
 add_subdirectory( mail_notifier )
 add_subdirectory( main )
+add_subdirectory( watchdog )
 
