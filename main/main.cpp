@@ -207,6 +207,13 @@ int main( int argc, char* argv[] )
       return 0;
     }
    
+    boost::filesystem::path target_js_lib =
+        boost::filesystem::path(boost::filesystem::path(target_file).remove_filename().directory_string())
+                                     / "jsDraw2D.js";
+    std::remove( target_js_lib.file_string().c_str() );
+
+    boost::filesystem::copy_file( "/opt/chm/js/jsDraw2D.js",
+                                  target_js_lib );
     if( vars.count("deamon"))
     {
       run_as_deamon( owfs_path,
