@@ -19,6 +19,7 @@
 #include "power_supply_monitor/power_supply_monitor.h"
 #include "power_supply_monitor/power_state_polygon_updater.hpp"
 #include "mail_notifier/mail_notifier.h"
+#include "version_polygon_updater/version_polygon_updater.hpp"
 
 using namespace chm;
 using boost::property_tree::iptree;
@@ -49,6 +50,9 @@ void generate_page( const std::string& owfs_path,
 
   power_state_polygon_updater power_updater((ac_adapter_path));
   power_updater.update_tree( tree );
+
+  version_polygon_updater ver_updater;
+  ver_updater.update_tree( tree );
 
   page html_page;
   std::for_each( make_begin_filter_const(props::polygon::relative(), tree),
@@ -127,7 +131,7 @@ void fake_notifier( const std::string& cmd )
 	std::cout << "fake_notifier:" << cmd;
 }
 //============================================================
-void run_as_deamon( const std::string& owfs_path,
+void run_as_daemon( const std::string& owfs_path,
                     const std::string& target_file,
                     const std::string& plan_file,
                     unsigned update_period_sec,
@@ -187,7 +191,7 @@ int main( int argc, char* argv[] )
     po::options_description desc("Allowed options");
     desc.add_options()
       ("help,h", "produce help message")
-      ("deamon,d", "run as deamon" )
+      ("daemon,d", "run as daemon" )
       ("owfs_path,o", po::value<std::string>(&owfs_path)->default_value("/media/1-wire"), "path to owfs mount point")
       ("target_file,t", po::value<std::string>(&target_file)->default_value("/var/www/index.html"), "generated page file")
       ("plan_file,p", po::value<std::string>(&plan_file)->default_value("/opt/chm/conf/plan.info"), "file with plan")
@@ -214,9 +218,9 @@ int main( int argc, char* argv[] )
 
     boost::filesystem::copy_file( "/opt/chm/js/jsDraw2D.js",
                                   target_js_lib );
-    if( vars.count("deamon"))
+    if( vars.count("daemon"))
     {
-      run_as_deamon( owfs_path,
+      run_as_daemon( owfs_path,
       		           target_file,
       		           plan_file,
       		           update_period_sec,

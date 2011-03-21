@@ -53,4 +53,12 @@ polygon
     y 70
     color 1000
   }
+  text
+  {
+    name version
+    value
+    x 120
+    y 90
+    color 1000
+  }
 }

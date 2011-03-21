@@ -9,6 +9,7 @@ include( ThirdParties.cmake NO_POLICY_SCOPE )
 
 include_directories( ${CMAKE_SOURCE_DIR} )
 
+add_subdirectory( version )
 add_subdirectory( third_parties )
 add_subdirectory( configuration_files )
 add_subdirectory( plan_reader )

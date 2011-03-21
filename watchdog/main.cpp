@@ -68,7 +68,7 @@ int main( int argc, char* argv[] )
     po::options_description desc("Allowed options");
     desc.add_options()
       ("help,h", "produce help message")
-      ("deamon,d", "run as deamon" )
+      ("daemon,d", "run as daemon" )
       ("check_target,c", po::value<std::string>(&check_target), "if target file or directory not found then system reboot")
     ;
 
@@ -88,7 +88,7 @@ int main( int argc, char* argv[] )
       return -1;
     }
 
-    if( vars.count("deamon"))
+    if( vars.count("daemon"))
     {
       check_condition( true,
                        10,
