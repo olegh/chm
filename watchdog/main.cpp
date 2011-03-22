@@ -6,6 +6,7 @@
 #include <boost/exception/all.hpp>
 #include <boost/date_time.hpp>
 #include <boost/bind.hpp>
+#include "version/version.hpp"
 
 namespace po = boost::program_options;
 
@@ -70,6 +71,7 @@ int main( int argc, char* argv[] )
       ("help,h", "produce help message")
       ("daemon,d", "run as daemon" )
       ("check_target,c", po::value<std::string>(&check_target), "if target file or directory not found then system reboot")
+      ("version,v", "get version number")
     ;
 
     po::variables_map vars;
@@ -79,6 +81,12 @@ int main( int argc, char* argv[] )
     if( vars.count("help"))
     {
       std::cout << desc;
+      return 0;
+    }
+
+    if( vars.count("version"))
+    {
+      std::cout << version::to_str() << "\n";
       return 0;
     }
 
