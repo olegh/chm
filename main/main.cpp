@@ -199,6 +199,7 @@ int main( int argc, char* argv[] )
       ("ac_adapter_path,a", po::value<std::string>(&ac_adapter_path)->default_value("/proc/acpi/ac_adapter"), "path to the ac_adapter dir, wich contains indormation about battery and AC")
       ("thread_number,t",  po::value<unsigned>(&thread_number)->default_value(2), "number of threads")
       ("mail_notify_to,m", po::value<std::string>(&mail_notify_to), "mail which will be notified about events")
+      ("version,v", "get version number")
     ;
 
     po::variables_map vars;
@@ -208,6 +209,12 @@ int main( int argc, char* argv[] )
     if( vars.count("help"))
     {
       std::cout << desc;
+      return 0;
+    }
+
+    if( vars.count("version"))
+    {
+      std::cout << version::to_str() << "\n";
       return 0;
     }
    

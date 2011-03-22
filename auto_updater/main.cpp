@@ -75,6 +75,7 @@ int main( int argc, char* argv[] )
     desc.add_options()
       ("help,h", "produce help message")
       ("daemon,d", "run as daemon" )
+      ("version,v", "get version number")
 
     ;
 
@@ -85,6 +86,12 @@ int main( int argc, char* argv[] )
     if( vars.count("help"))
     {
       std::cout << desc;
+      return 0;
+    }
+
+    if( vars.count("version"))
+    {
+      std::cout << version::to_str() << "\n";
       return 0;
     }
 
