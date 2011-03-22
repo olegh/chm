@@ -25,7 +25,7 @@ void try_update( const boost::filesystem::path& local_tree_path )
   }
   else
   {
-    const std::string cmd = "cd " + local_tree_path.file_string() + "; git pull; rm -rf ./bin; mkdir bin; cd ./bin; cmake ../";
+    const std::string cmd = "cd " + local_tree_path.file_string() + "; git pull origin stable -f; rm -rf ./bin; mkdir bin; cd ./bin; cmake ../";
     if( 0 != ::system( cmd.c_str() ))
     {
       BOOST_THROW_EXCEPTION( boost::enable_error_info(std::runtime_error("command fail: " + cmd)));

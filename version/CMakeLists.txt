@@ -1,7 +1,7 @@
 set ( MAJOR 0 )
 set ( MINOR 1 )
 
-execute_process( COMMAND git rev-list --all
+execute_process( COMMAND git rev-list master
                  COMMAND wc -l
                  OUTPUT_VARIABLE REVISION
                  RESULT_VARIABLE RETURN_CODE
