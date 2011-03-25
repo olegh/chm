@@ -19,7 +19,7 @@ BOOST_AUTO_TEST_CASE( read_plygon_whith_read_from_xml )
   const std::string xmldoc =
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
     "<polygon>"
-      "<thermometer_id>34287364287</thermometer_id>"
+      "<thermometer_id>34287364</thermometer_id>"
       "<name>bathroom</name>"
       "<point>"
         "<x>1</x>"
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE( read_plygon_whith_read_from_xml )
   BOOST_CHECK( it != child.not_found() );
   BOOST_CHECK_EQUAL( 3, (*it).second.get<int>("x"));
   BOOST_CHECK_EQUAL( 4, (*it).second.get<int>("y"));
-  BOOST_CHECK_EQUAL( (uint64_t)34287364287, tree.get<uint64_t>("polygon.thermometer_id"));
+  BOOST_CHECK_EQUAL( (uint64_t)34287364, tree.get<uint64_t>("polygon.thermometer_id"));
   BOOST_CHECK_EQUAL( std::string("bathroom"), tree.get<std::string>("polygon.name"));
 }
 //=======================================================
@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_CASE( read_plygon_whith_read_from_info )
   const std::string infodoc =
     "polygon\n"
     "{\n"
-       "thermometer_id 34287364287\n"
+       "thermometer_id 34287364\n"
        "name \"bathroom\""
        "point\n"
        "{\n"
@@ -92,7 +92,7 @@ BOOST_AUTO_TEST_CASE( read_plygon_whith_read_from_info )
   BOOST_CHECK( it != child.not_found() );
   BOOST_CHECK_EQUAL( 3, (*it).second.get<int>("x"));
   BOOST_CHECK_EQUAL( 4, (*it).second.get<int>("y"));
-  BOOST_CHECK_EQUAL( (uint64_t)34287364287, tree.get<uint64_t>("polygon.thermometer_id"));
+  BOOST_CHECK_EQUAL( (uint64_t)34287364, tree.get<uint64_t>("polygon.thermometer_id"));
   BOOST_CHECK_EQUAL( std::string("bathroom"), tree.get<std::string>("polygon.name"));
 }
 
