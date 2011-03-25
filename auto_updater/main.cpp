@@ -23,14 +23,13 @@ void try_update( const boost::filesystem::path& local_tree_path )
       BOOST_THROW_EXCEPTION( boost::enable_error_info(std::runtime_error("command fail: " + cmd)));
     }
   }
-  else
+
+  const std::string cmd = "cd " + local_tree_path.file_string() + "; git pull origin stable -f; rm -rf ./bin; mkdir bin; cd ./bin; cmake ../";
+  if( 0 != ::system( cmd.c_str() ))
   {
-    const std::string cmd = "cd " + local_tree_path.file_string() + "; git pull origin stable -f; rm -rf ./bin; mkdir bin; cd ./bin; cmake ../";
-    if( 0 != ::system( cmd.c_str() ))
-    {
       BOOST_THROW_EXCEPTION( boost::enable_error_info(std::runtime_error("command fail: " + cmd)));
-    }
   }
+
 
 
   std::ifstream version_number_file((( local_tree_path / "version" / "version").file_string().c_str()));
@@ -46,7 +45,7 @@ void try_update( const boost::filesystem::path& local_tree_path )
   if( version_number > version::get() )
   {
     boost::filesystem::path bin_path = local_tree_path / "bin";
-    std::cout << "read version: " << version_number << " current version" << version::get() << "\n";
+    std::cout << "read version: " << version_number << " current version:" << version::get() << "\n";
     if( 0 != ::system( ("cd " + bin_path.file_string() + "; make; make test").c_str() ))
     {
       BOOST_THROW_EXCEPTION( boost::enable_error_info(std::runtime_error("run tests fails")));
