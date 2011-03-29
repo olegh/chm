@@ -16,13 +16,21 @@ void reboot()
   ::system( "reboot");
 }
 //============================================================================
-bool check_condition_impl( bool isFirstCheck, const std::string& check_target )
+bool check_condition_impl( bool isFirstCheck, const std::string& check_target, const std::string& host )
 {
-  if( !boost::filesystem::exists(check_target) )
+  const bool isTargetExists = boost::filesystem::exists(check_target);
+  bool isHostReacheble = true;
+
+  if( !host.empty())
+  {
+    isHostReacheble = (0 == ::system( ("ping -v -c 1 -W 10 " + host).c_str() ));
+  }
+
+  if( !isTargetExists || !isHostReacheble )
   {
     if( isFirstCheck )
     {
-      std::cerr << "err file: " + check_target + " not found at first check\n";
+      std::cerr << "first check of condition fails";
       return false;
     }
     else
@@ -35,12 +43,13 @@ bool check_condition_impl( bool isFirstCheck, const std::string& check_target )
 void check_condition( bool isFirstCheck,
                       unsigned period,
                       const std::string& check_target,
+                      const std::string& host,
                       boost::asio::deadline_timer& timer,
                       const boost::system::error_code& )
 {
   try
   {
-    if( !check_condition_impl( isFirstCheck, check_target ))
+    if( !check_condition_impl( isFirstCheck, check_target, host ))
       return;
   }
   catch( ... )
@@ -53,6 +62,7 @@ void check_condition( bool isFirstCheck,
                                  false,
                                  period,
                                  boost::ref(check_target),
+                                 boost::ref(host),
                                  boost::ref(timer),
                                  _1));
 }
@@ -62,7 +72,7 @@ int main( int argc, char* argv[] )
 
   try
   {
-    std::string check_target;
+    std::string check_target, host;
     boost::asio::io_service io;
     boost::asio::deadline_timer check_target_timer((io));
 
@@ -72,6 +82,7 @@ int main( int argc, char* argv[] )
       ("daemon,d", "run as daemon" )
       ("check_target,c", po::value<std::string>(&check_target), "if target file or directory not found then system reboot")
       ("version,v", "get version number")
+      ("remote_host,r", po::value<std::string>(&host)->default_value("google.com"), "if value is set, then also check connection to internet by pinging host")
     ;
 
     po::variables_map vars;
@@ -99,14 +110,15 @@ int main( int argc, char* argv[] )
     if( vars.count("daemon"))
     {
       check_condition( true,
-                       10,
+                       100,
                        check_target,
+                       host,
                        check_target_timer,
                        boost::system::error_code() );
       io.run();
     }
     else
-      check_condition_impl(true, check_target);
+      check_condition_impl(true, check_target, host);
 
   }
   catch( ... )
