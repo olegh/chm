@@ -137,7 +137,7 @@ void run_as_daemon( const std::string& owfs_path,
                     unsigned update_period_sec,
                     unsigned thread_number,
                     const std::string& ac_adapter_path,
-                    const std::string& mail_notify_to )
+                    const std::vector<std::string>& mail_notify_to )
 {
   using namespace boost;
   io_service io_service;
@@ -154,7 +154,7 @@ void run_as_daemon( const std::string& owfs_path,
   }
   else
   {
-  	notificator = boost::bind( &mail_notifier::notify, &notifier, ref(mail_notify_to), ref(subject), _1 );
+  	notificator = boost::bind( &mail_notifier::notify_by_list, &notifier, ref(mail_notify_to), ref(subject), _1 );
   }
   power_state_alarmer alarmer( notificator,
   		                         boost::bind(&power_supply_monitor::is_power_on, &power_state_monitor));
@@ -185,8 +185,9 @@ int main( int argc, char* argv[] )
 {
   try
   {
-    std::string owfs_path, target_file, plan_file, ac_adapter_path, mail_notify_to;
+    std::string owfs_path, target_file, plan_file, ac_adapter_path;
     unsigned update_period_sec = 0, thread_number = 0;
+    std::vector<std::string> emails;
 
     po::options_description desc("Allowed options");
     desc.add_options()
@@ -198,7 +199,7 @@ int main( int argc, char* argv[] )
       ("update_period,u", po::value<unsigned>(&update_period_sec)->default_value(10), "update thermometers period in seconds, take place only with -d option")
       ("ac_adapter_path,a", po::value<std::string>(&ac_adapter_path)->default_value("/proc/acpi/ac_adapter"), "path to the ac_adapter dir, wich contains indormation about battery and AC")
       ("thread_number,t",  po::value<unsigned>(&thread_number)->default_value(2), "number of threads")
-      ("mail_notify_to,m", po::value<std::string>(&mail_notify_to), "mail which will be notified about events")
+      ("mail_list,m", po::value< std::vector<std::string> >( &emails )->multitoken(), "mail list wich will be notified about events")
       ("version,v", "get version number")
     ;
 
@@ -233,7 +234,7 @@ int main( int argc, char* argv[] )
       		           update_period_sec,
       		           thread_number,
       		           ac_adapter_path,
-      		           mail_notify_to );
+      		           emails );
     }
     else
       generate_page( owfs_path, target_file, plan_file, ac_adapter_path );

@@ -2,6 +2,7 @@
 # define e55c1ed8_706b_4135_8b0f_b9c11b6c3893
 
 #include <string>
+#include <vector>
 #include <boost/function.hpp>
 
 namespace chm{
@@ -29,8 +30,22 @@ public:
 	 * @Throws: yes
 	 */
 	void notify( const std::string& email,
-			         const std::string& subject,
-			         const std::string& message );
+			     const std::string& subject,
+			     const std::string& message );
+
+
+	/**
+	  * @Comment: sends mail to address at @email
+	  * @Parameter: email - target e-mail address, can't be empty
+	  * @Parameter: subject - header of the letter
+	  * @Parameter: message - body of the letter
+	  * @Throws: yes
+	  */
+	void notify_by_list( const std::vector< std::string >& mail_list,
+	                     const std::string& subject,
+	                     const std::string& message );
+
+
 
 private:
 

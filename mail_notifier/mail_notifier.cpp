@@ -100,4 +100,13 @@ notify( const std::string& email,
   }
 }
 //=======================================================================
+void mail_notifier::
+notify_by_list( const std::vector< std::string >& mail_list,
+                const std::string& subject,
+                const std::string& message )
+{
+   std::for_each( mail_list.begin(), mail_list.end(),
+                 boost::bind( &mail_notifier::notify, this, _1, boost::ref(subject), boost::ref(message)));
+}
+//=======================================================================
 } //namespace chm
