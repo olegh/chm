@@ -43,8 +43,8 @@ static std::string fake_file()
  */
 BOOST_AUTO_TEST_CASE( test_mail_notification )
 {
-	fake_console console;
-	mail_notifier notifier( boost::bind( &fake_console::put, &console, _1 ), fake_file );
+  fake_console console;
+  mail_notifier notifier( boost::bind( &fake_console::put, &console, _1 ), fake_file );
   notifier.notify( "some.mail@some.com", "power off", "power is off at !xxx!");
 
   const std::string expected =
@@ -54,16 +54,26 @@ BOOST_AUTO_TEST_CASE( test_mail_notification )
 }
 //===================================================
 
-
 /**
- * @Comment: test notification by mail with real console
+ *  @Comment: test notification several receivers
  */
-//BOOST_AUTO_TEST_CASE( test_mail_notification_real )
-//{
-//	mail_notifier notifier;
-//	notifier.notify( "snail.incm@gmail.com", "powe off", "power is off at xxx");
-//}
+BOOST_AUTO_TEST_CASE( test_notification_by_list )
+{
+  fake_console console;
+  std::vector< std::string > emails;
+  emails.push_back("some.mail@some.com");
+  emails.push_back("some1.mail@some.com");
+
+  mail_notifier notifier( boost::bind( &fake_console::put, &console, _1 ), fake_file );
+  notifier.notify_by_list( emails, "power off", "power is off at !xxx!");
+
+  const std::string expected =
+         "mailx -s \"power off\" some.mail@some.com </tmp/some_tmp_filemailx -s \"power off\" some1.mail@some.com </tmp/some_tmp_file";
+
+   BOOST_CHECK_EQUAL( console.str(), expected );
+}
 //===================================================
+
 
 
 

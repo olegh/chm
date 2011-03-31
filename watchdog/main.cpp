@@ -6,6 +6,7 @@
 #include <boost/exception/all.hpp>
 #include <boost/date_time.hpp>
 #include <boost/bind.hpp>
+#include <boost/cast.hpp>
 #include "version/version.hpp"
 
 namespace po = boost::program_options;
@@ -16,14 +17,15 @@ void reboot()
   ::system( "reboot");
 }
 //============================================================================
-bool check_condition_impl( bool isFirstCheck, const std::string& check_target, const std::string& host )
+bool check_condition_impl( bool isFirstCheck, const std::string& check_target, const std::string& host, unsigned ping_requests_number )
 {
   const bool isTargetExists = boost::filesystem::exists(check_target);
   bool isHostReacheble = true;
+  const std::string pint_requests = boost::lexical_cast<std::string>(ping_requests_number);
 
   if( !host.empty())
   {
-    isHostReacheble = (0 == ::system( ("ping -v -c 1 -W 10 " + host).c_str() ));
+    isHostReacheble = (0 == ::system( ("ping -v -c " + pint_requests + " -W 10 " + host).c_str() ));
   }
 
   if( !isTargetExists || !isHostReacheble )
@@ -44,12 +46,13 @@ void check_condition( bool isFirstCheck,
                       unsigned period,
                       const std::string& check_target,
                       const std::string& host,
+                      unsigned ping_requests_number,
                       boost::asio::deadline_timer& timer,
                       const boost::system::error_code& )
 {
   try
   {
-    if( !check_condition_impl( isFirstCheck, check_target, host ))
+    if( !check_condition_impl( isFirstCheck, check_target, host, ping_requests_number ))
       return;
   }
   catch( ... )
@@ -63,6 +66,7 @@ void check_condition( bool isFirstCheck,
                                  period,
                                  boost::ref(check_target),
                                  boost::ref(host),
+                                 ping_requests_number,
                                  boost::ref(timer),
                                  _1));
 }
@@ -75,6 +79,7 @@ int main( int argc, char* argv[] )
     std::string check_target, host;
     boost::asio::io_service io;
     boost::asio::deadline_timer check_target_timer((io));
+    unsigned ping_request_number = 0, check_condition_period = 0;
 
     po::options_description desc("Allowed options");
     desc.add_options()
@@ -83,6 +88,8 @@ int main( int argc, char* argv[] )
       ("check_target,c", po::value<std::string>(&check_target), "if target file or directory not found then system reboot")
       ("version,v", "get version number")
       ("remote_host,r", po::value<std::string>(&host)->default_value("google.com"), "if value is set, then also check connection to internet by pinging host")
+      ("ping_request_number,p", po::value<unsigned>(&ping_request_number)->default_value(3), "number of ping request to check internet connection")
+      ("check_delay,d", po::value<unsigned>(&check_condition_period)->default_value(300), "number of seconds in perdiod between checking internet connection")
     ;
 
     po::variables_map vars;
@@ -110,15 +117,16 @@ int main( int argc, char* argv[] )
     if( vars.count("daemon"))
     {
       check_condition( true,
-                       100,
+                       check_condition_period,
                        check_target,
                        host,
+                       ping_request_number,
                        check_target_timer,
                        boost::system::error_code() );
       io.run();
     }
     else
-      check_condition_impl(true, check_target, host);
+      check_condition_impl(true, check_target, host, ping_request_number);
 
   }
   catch( ... )
