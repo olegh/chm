@@ -20,7 +20,7 @@ struct fake_console
 {
   int put( const std::string& cmd )
   {
-    cmd_ = cmd;
+    cmd_ += cmd;
     return 0;
   }
 
