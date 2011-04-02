@@ -89,7 +89,7 @@ int main( int argc, char* argv[] )
       ("version,v", "get version number")
       ("remote_host,r", po::value<std::string>(&host)->default_value("google.com"), "if value is set, then also check connection to internet by pinging host")
       ("ping_request_number,p", po::value<unsigned>(&ping_request_number)->default_value(3), "number of ping request to check internet connection")
-      ("check_delay,d", po::value<unsigned>(&check_condition_period)->default_value(300), "number of seconds in perdiod between checking internet connection")
+      ("seconds_delay_beween_checks,s", po::value<unsigned>(&check_condition_period)->default_value(300), "number of seconds in perdiod between checking internet connection")
     ;
 
     po::variables_map vars;
