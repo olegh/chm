@@ -61,4 +61,11 @@ polygon
     y 90
     color 1000
   }
+
+  image
+  {
+    url temperature.png
+    x 120
+    y 120
+  }
 }

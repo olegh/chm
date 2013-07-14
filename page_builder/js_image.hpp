@@ -51,7 +51,7 @@ private:
         boost::int32_t y =
             ptree.template get<boost::int32_t>(props::polygon::image::y::relative());
 
-        result += "gr.drawImage(" + url + ", " + js_so::jsPoint( x, y) + ");\n";
+        result += "gr.drawImage(\"" + url + "\", " + js_so::jsPoint( x, y) + ");\n";
     }
 
 private:

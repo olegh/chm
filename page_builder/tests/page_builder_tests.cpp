@@ -152,7 +152,7 @@ BOOST_AUTO_TEST_CASE( build_js_image_test )
   const iptree& polygon = tree.get_child( props::polygon::full() );
 
   const std::string expected = 
-    "gr.drawImage(thermometers.png, new jsPoint( 40, 50 ));\n";
+    "gr.drawImage(\"thermometers.png\", new jsPoint( 40, 50 ));\n";
 
   BOOST_CHECK_EQUAL( js_image(polygon)(), expected );
 }
