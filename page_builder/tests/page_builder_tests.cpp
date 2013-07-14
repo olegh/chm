@@ -6,6 +6,7 @@
 #include "page_builder/js_polygon.hpp"
 #include "page_builder/page.hpp"
 #include "page_builder/js_text.hpp"
+#include "page_builder/js_image.hpp"
 
 using boost::uint64_t;
 using namespace chm;
@@ -20,7 +21,7 @@ boost::property_tree::iptree make_square_room_helper()
   tree.put( props::polygon::thermometer_id::full(), "A2.43287423" );
   tree.put( props::polygon::color::full(), 0xFFCC33 );
 
-  boost::property_tree::iptree p1, p2, p3, p4, text1, text2;
+  boost::property_tree::iptree p1, p2, p3, p4, text1, text2, image;
   p1.put( props::polygon::point::x::relative(), 0 );
   p1.put( props::polygon::point::y::relative(), 0 );
   p2.put( props::polygon::point::x::relative(), 1 );
@@ -46,8 +47,13 @@ boost::property_tree::iptree make_square_room_helper()
   text2.put( props::polygon::text::x::relative(), 10 );
   text2.put( props::polygon::text::y::relative(), 15 );
 
+  image.put( props::polygon::image::url::relative(), "thermometers.png");
+  image.put( props::polygon::image::x::relative(), 40 );
+  image.put( props::polygon::image::y::relative(), 50 );
+
   tree.add_child( props::polygon::text::full(), text1 );
   tree.add_child( props::polygon::text::full(), text2 );
+  tree.add_child( props::polygon::image::full(), image );
 
   return tree;
 }
@@ -138,4 +144,17 @@ BOOST_AUTO_TEST_CASE( build_test_js_test  )
 
   BOOST_CHECK_EQUAL( expected, js_text(polygon)() );
 }
+
+BOOST_AUTO_TEST_CASE( build_js_image_test )
+{
+  using boost::property_tree::iptree; 
+  iptree tree = make_square_room_helper();
+  const iptree& polygon = tree.get_child( props::polygon::full() );
+
+  const std::string expected = 
+    "gr.drawImage(thermometers.png, new jsPoint( 40, 50 ));\n";
+
+  BOOST_CHECK_EQUAL( js_image(polygon)(), expected );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

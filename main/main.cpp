@@ -11,6 +11,7 @@
 #include "page_builder/page.hpp"
 #include "page_builder/js_text.hpp"
 #include "page_builder/js_polygon.hpp"
+#include "page_builder/js_image.hpp"
 #include "plan_reader/plan_reader.hpp"
 #include "owfs_reader/owfs_reader.hpp"
 #include "common/named_properties.hpp"
@@ -33,7 +34,8 @@ void add_builders( page& html_page,
 {
   const iptree& cur_tree = pair.second; 
   html_page << js_polygon(cur_tree) 
-    << js_text(cur_tree);
+    << js_text(cur_tree)
+    << js_image(cur_tree);
 }
 //============================================================
 void generate_page( const std::string& owfs_path,
