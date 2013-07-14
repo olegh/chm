@@ -145,7 +145,7 @@ namespace chm
       if( !fs::exists(temperature_file))
         return false;
 
-      std::string file_string = temperature_file.file_string();
+      std::string file_string = temperature_file.string();
       double temperature;
       std::ifstream(file_string.c_str()) >> temperature;
 

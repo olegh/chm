@@ -69,6 +69,28 @@ struct props
         static std::string relative(){ return "color"; }
       };
     };
+
+    struct image
+    {
+      static std::string full(){ return polygon::full() + "." + relative(); }
+      static std::string relative(){ return "image"; }
+
+      struct url
+      {
+        static std::string full(){ return image::full() + "." + relative(); }
+        static std::string relative(){ return "url"; }
+      };
+
+      struct x{
+        static std::string full(){ return image::full() + "." + relative(); }
+        static std::string relative(){ return "x"; }
+      };
+
+      struct y{
+        static std::string full(){ return image::full() + "." + relative(); }
+        static std::string relative(){ return "y"; }
+      };
+    };
   };
 };
 
