@@ -17,14 +17,14 @@ void try_update( const boost::filesystem::path& local_tree_path )
 
   if( !boost::filesystem::exists( local_tree_path ))
   {
-    const std::string cmd ="git clone " + git_url + " -b " + branch + " " + local_tree_path.file_string();
+    const std::string cmd ="git clone " + git_url + " -b " + branch + " " + local_tree_path.string();
     if( 0 != ::system( cmd.c_str()))
     {
       BOOST_THROW_EXCEPTION( boost::enable_error_info(std::runtime_error("command fail: " + cmd)));
     }
   }
 
-  const std::string cmd = "cd " + local_tree_path.file_string() + "; git pull origin stable -f; rm -rf ./bin; mkdir bin; cd ./bin; cmake ../";
+  const std::string cmd = "cd " + local_tree_path.string() + "; git pull origin stable -f; rm -rf ./bin; mkdir bin; cd ./bin; cmake ../";
   if( 0 != ::system( cmd.c_str() ))
   {
       BOOST_THROW_EXCEPTION( boost::enable_error_info(std::runtime_error("command fail: " + cmd)));
@@ -32,11 +32,11 @@ void try_update( const boost::filesystem::path& local_tree_path )
 
 
 
-  std::ifstream version_number_file((( local_tree_path / "version" / "version").file_string().c_str()));
+  std::ifstream version_number_file((( local_tree_path / "version" / "version").string().c_str()));
 
   if( !version_number_file.good() )
   {
-    BOOST_THROW_EXCEPTION( std::runtime_error("Can't open file: " + ( local_tree_path / "version" / "version").file_string()));
+    BOOST_THROW_EXCEPTION( std::runtime_error("Can't open file: " + ( local_tree_path / "version" / "version").string()));
   }
 
   unsigned version_number = 0;
@@ -46,12 +46,12 @@ void try_update( const boost::filesystem::path& local_tree_path )
   {
     boost::filesystem::path bin_path = local_tree_path / "bin";
     std::cout << "read version: " << version_number << " current version:" << version::get() << "\n";
-    if( 0 != ::system( ("cd " + bin_path.file_string() + "; make; make test").c_str() ))
+    if( 0 != ::system( ("cd " + bin_path.string() + "; make; make test").c_str() ))
     {
       BOOST_THROW_EXCEPTION( boost::enable_error_info(std::runtime_error("run tests fails")));
     }
 
-    if( 0 != ::system( ("cd " + bin_path.file_string() + "; make install").c_str() ))
+    if( 0 != ::system( ("cd " + bin_path.string() + "; make install").c_str() ))
     {
       BOOST_THROW_EXCEPTION( boost::enable_error_info(std::runtime_error("install fails")));
     }

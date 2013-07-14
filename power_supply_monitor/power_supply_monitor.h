@@ -117,7 +117,7 @@ public:
   	path ac_dir = *dirIter,
     state = ac_dir / "state";
 
-    stream_wrapper_ = detail::make_stream_wrapper( state.file_string() );
+    stream_wrapper_ = detail::make_stream_wrapper( state.string() );
   }
 
   explicit

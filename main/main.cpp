@@ -220,9 +220,9 @@ int main( int argc, char* argv[] )
     }
    
     boost::filesystem::path target_js_lib =
-        boost::filesystem::path(boost::filesystem::path(target_file).remove_filename().directory_string())
+        boost::filesystem::path(boost::filesystem::path(target_file).remove_filename().string())
                                      / "jsDraw2D.js";
-    std::remove( target_js_lib.file_string().c_str() );
+    std::remove( target_js_lib.string().c_str() );
 
     boost::filesystem::copy_file( "/opt/chm/js/jsDraw2D.js",
                                   target_js_lib );
